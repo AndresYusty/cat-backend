@@ -30,6 +30,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO register(CreateUserDTO dto) {
+        // Verificar si el usuario ya existe
+        if (repo.findByUsername(dto.getUsername()).isPresent()) {
+            throw new RuntimeException("El usuario ya existe");
+        }
+        
         String hashed = encoder.encode(dto.getPassword());
         User u = User.builder()
                 .username(dto.getUsername())
